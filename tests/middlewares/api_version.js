@@ -11,7 +11,7 @@ class MockupRequest {
     }
 }
 
-it('Should set accept-version to 1.0.0 and change url to /hello with /api/v1.0.0/hello [prefix: api]', (done) => {
+it('Should set accept-version to 1.0.0 and remove the version from the url /api/v1.0.0/hello [prefix: api]', (done) => {
     let request = new MockupRequest('/api/v1.0.0/hello', {
         host: 'asynchronoustoddler.com'
     });
@@ -24,12 +24,12 @@ it('Should set accept-version to 1.0.0 and change url to /hello with /api/v1.0.0
         expect(request.headers['accept-version']).to.equal('1.0.0');
         expect(request.headers['host']).to.equal('asynchronoustoddler.com');
         expect(request.original_url).to.equal('/api/v1.0.0/hello');
-        expect(request.url).to.equal('/hello');
+        expect(request.url).to.equal('/api/hello');
         done();
-    })
+    });
 });
 
-it('Should set accept-version to 1.0.0 and change url to /hello with /api/v1.0/hello [prefix: api]', (done) => {
+it('Should set accept-version to 1.0.0 and remove the version from the url /api/v1.0/hello [prefix: api]', (done) => {
     let request = new MockupRequest('/api/v1.0/hello', {
         host: 'asynchronoustoddler.com'
     });
@@ -42,12 +42,12 @@ it('Should set accept-version to 1.0.0 and change url to /hello with /api/v1.0/h
         expect(request.headers['accept-version']).to.equal('1.0.0');
         expect(request.headers['host']).to.equal('asynchronoustoddler.com');
         expect(request.original_url).to.equal('/api/v1.0/hello');
-        expect(request.url).to.equal('/hello');
+        expect(request.url).to.equal('/api/hello');
         done();
-    })
+    });
 });
 
-it('Should set accept-version to 1.0.0 and change url to /hello with /api/v1/hello [prefix: api]', (done) => {
+it('Should set accept-version to 1.0.0 and remove the version from the url /api/v1/hello [prefix: api]', (done) => {
     let request = new MockupRequest('/api/v1/hello', {
         host: 'asynchronoustoddler.com'
     });
@@ -60,9 +60,9 @@ it('Should set accept-version to 1.0.0 and change url to /hello with /api/v1/hel
         expect(request.headers['accept-version']).to.equal('1.0.0');
         expect(request.headers['host']).to.equal('asynchronoustoddler.com');
         expect(request.original_url).to.equal('/api/v1/hello');
-        expect(request.url).to.equal('/hello');
+        expect(request.url).to.equal('/api/hello');
         done();
-    })
+    });
 });
 
 it('Should throw a InvalidVersionError when an invalid version is provided [prefix: api]', (done) => {
@@ -79,10 +79,27 @@ it('Should throw a InvalidVersionError when an invalid version is provided [pref
         expect(request.headers['host']).to.equal('asynchronoustoddler.com');
         expect(request.original_url).to.equal('/api/vInvalid/hello');
         done();
-    })
+    });
 });
 
-it('Should set accept-version to 1.0.0 and change url to /hello with /v1.0.0/hello [no prefix]', (done) => {
+it('Should ignore urls that doesn\'t have the prefix [prefix: api]', (done) => {
+    let request = new MockupRequest('/blog/posts/im-liara-roervig', {
+        host: 'asynchronoustoddler.com'
+    });
+    let func = MiddlewareAPIVersion({
+        prefix: '/api'
+    });
+    func(request, {}, (err) => {
+        expect(err).to.be.undefined;
+        expect(request.headers['accept-version']).to.be.undefined;
+        expect(request.headers['host']).to.equal('asynchronoustoddler.com');
+        expect(request.original_url).to.undefined;
+        expect(request.url).to.equal('/blog/posts/im-liara-roervig');
+        done();
+    });
+});
+
+it('Should set accept-version to 1.0.0 and remove the version from the url /v1.0.0/hello [no prefix]', (done) => {
     let request = new MockupRequest('/v1.0.0/hello', {
         host: 'asynchronoustoddler.com'
     });
@@ -95,10 +112,10 @@ it('Should set accept-version to 1.0.0 and change url to /hello with /v1.0.0/hel
         expect(request.original_url).to.equal('/v1.0.0/hello');
         expect(request.url).to.equal('/hello');
         done();
-    })
+    });
 });
 
-it('Should set accept-version to 1.0.0 and change url to /hello with /v1.0/hello [no prefix]', (done) => {
+it('Should set accept-version to 1.0.0 and remove the version from the url /v1.0/hello [no prefix]', (done) => {
     let request = new MockupRequest('/v1.0/hello', {
         host: 'asynchronoustoddler.com'
     });
@@ -111,10 +128,10 @@ it('Should set accept-version to 1.0.0 and change url to /hello with /v1.0/hello
         expect(request.original_url).to.equal('/v1.0/hello');
         expect(request.url).to.equal('/hello');
         done();
-    })
+    });
 });
 
-it('Should set accept-version to 1.0.0 and change url to /hello with /v1/hello [no prefix]', (done) => {
+it('Should set accept-version to 1.0.0 and remove the version from the url /v1/hello [no prefix]', (done) => {
     let request = new MockupRequest('/v1/hello', {
         host: 'asynchronoustoddler.com'
     });
@@ -127,7 +144,7 @@ it('Should set accept-version to 1.0.0 and change url to /hello with /v1/hello [
         expect(request.original_url).to.equal('/v1/hello');
         expect(request.url).to.equal('/hello');
         done();
-    })
+    });
 });
 
 it('Should throw a InvalidVersionError when an invalid version is provided [no prefix]', (done) => {
@@ -142,5 +159,5 @@ it('Should throw a InvalidVersionError when an invalid version is provided [no p
         expect(request.headers['host']).to.equal('asynchronoustoddler.com');
         expect(request.original_url).to.equal('/vInvalid/hello');
         done();
-    })
+    });
 });

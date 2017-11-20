@@ -16,6 +16,10 @@ module.exports = function (options) {
     let path_prefix = options.prefix || '';
 
     return function (request, response, next) {
+        if(!request.url.startsWith(path_prefix)) {
+             next();
+        }
+
         request.original_url = request.url;
         request.url = request.url.replace(path_prefix, '');
 
@@ -27,7 +31,7 @@ module.exports = function (options) {
         version = version.replace(/v(\d{1})/, '$1.0.0');
 
         if (semver.valid(version)) {
-            request.url = request.url.substr(pieces[0].length + 1);
+            request.url = path_prefix + request.url.substr(pieces[0].length + 1);
             request.headers = request.headers || {};
             request.headers['accept-version'] = version;
         } else {
