@@ -1,0 +1,30 @@
+{
+  "name": "asynchronoustoddler-core",
+  "version": "0.1.0",
+  "description": "The core parts of AsynchronousToddler.com",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsynchronousToddler/Core.git"
+  },
+  "author": "AsynchronousToddler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AsynchronousToddler/Core/issues"
+  },
+  "homepage": "https://github.com/AsynchronousToddler/Core#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "mongoose": "^4.13.4",
+    "restify": "^6.3.2",
+    "restify-errors": "^5.0.0",
+    "restify-router": "^0.5.0",
+    "semver": "^5.4.1"
+  }
+}
